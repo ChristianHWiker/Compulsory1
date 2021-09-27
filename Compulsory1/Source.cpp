@@ -2,16 +2,17 @@
 #include <string>;
 #include <conio.h>
 #include <Windows.h>
+#include <vector>
 
 void game();
 void checkDraw();
 void drawBoard();
 void calcWinner();
-void gameEnd();
 
 int row{};
 int col{};
-char table[3][3] = { {'1','2','3'},{'4','5','6'},{'7','8','9'} };
+std::vector <std::vector<char>> table = { {'1','2','3'},{'4','5','6'},{'7','8','9'} };
+//char table[3][3] = { {'1','2','3'},{'4','5','6'},{'7','8','9'} };
 int choice;
 bool gameWon = false;
 int currentPlayer = 1;
@@ -189,53 +190,49 @@ void calcWinner()
 	}
 }
 
-void gameEnd()
-{
-	int answer{};
-
-	std::cout << "Play again? Y/N: ";
-	std::cin >> answer;
-
-	switch (answer)
-	{
-	case 'y': case 'Y':
-		for (int i = 0; i < 3; i++)
-			char table[3][3] = { {'1','2','3'}, {'4','5','6'}, {'7','8','9'} };
-		system("cls");
-		game();
-		break;
-	case 'n': case 'N':
-		exit(0);
-	default:
-		break;
-	}
-}
 
 int main()
 {
 	
-	std::cout << "Welcome to Tic Tac Toe!\n\n";
+	char answer{ 'y' };
 
-	while (gameWon == false) {
-		system("cls");
-		drawBoard();
-		calcWinner();
-		if (gameWon == true)
+	
+	while (tolower(answer) == 'y') 
+	{
+		std::cout << "Welcome to Tic Tac Toe!\n\n";
+		system("pause");
+		gameWon = false;
+		table = { {'1','2','3'},{'4','5','6'},{'7','8','9'} };
+		
+		while (gameWon == false) 
 		{
-			if (currentPlayer == 1)
+			system("cls");
+			drawBoard();
+			calcWinner();
+			if (gameWon == true)
 			{
-				currentPlayer = 2;
+				if (currentPlayer == 1)
+				{
+					currentPlayer = 2;
+				}
+				else if (currentPlayer == 2)
+				{
+					currentPlayer = 1;
+				}
+				break;
 			}
-			else if (currentPlayer == 2)
-			{
-				currentPlayer = 1;
-			}
-			break;
+			game();
 		}
-		game();
+		std::cout << "Do you want to play again? y/n: ";
+		std::cin >> answer;
+		/*if (answer == 'y') {
+			gameWon = false;
+			return 0;
+		}
+		else if (tolower(answer) == 'n')
+		{
+			exit(0);
+		}*/
 	}
-	
-	gameEnd();
-	
 	
 }
