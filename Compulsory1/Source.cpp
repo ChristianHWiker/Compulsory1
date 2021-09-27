@@ -1,31 +1,39 @@
 #include <iostream>;
 #include <string>;
+#include <conio.h>
+#include <Windows.h>
+
+void game();
+void checkDraw();
+void drawBoard();
+void calcWinner();
+void gameEnd();
 
 int row{};
 int col{};
 char table[3][3] = { {'1','2','3'},{'4','5','6'},{'7','8','9'} };
-bool draw = false;
 int choice;
+bool gameWon = false;
+int currentPlayer = 1;
 
 
 void game()
 {
-	int currentPlayer = 1;
+	checkDraw();
 
 	if (currentPlayer == 1)
 	{
-		currentPlayer = 1;
 		std::cout << "\nPlayer 1 [X] take your turn: ";
 	}
 	else
 	{
-		currentPlayer = 2;
 		std::cout << "\nPlayer 2 [O] take your turn: ";
 	}
 
-	std::cin >> choice;
+	char ch = _getch();
+	int i = (int)((char)ch - '0');
 
-	switch (choice)
+	switch (i)
 	{
 	case 1: row = 0, col = 0;
 		break;
@@ -58,29 +66,176 @@ void game()
 	{
 		table[row][col] = 'O';
 	}
+
+	if (currentPlayer == 2)
+	{
+		currentPlayer = 1;
+		std::cout << "\nPlayer 1 [X] take your turn: ";
+	}
+	else
+	{
+		currentPlayer = 2;
+		std::cout << "\nPlayer 2 [O] take your turn: ";
+	}
 }
 
+void checkDraw()
+{
+	int counter;
+	bool draw = false;
+
+	for (int i = 0; i < 3; i++) 
+	{
+		
+		for (int j = 0; j < 3; j++)
+		{
+			if (table[i][j] == 'X')
+			{
+				draw = true;
+				continue;
+			}
+			else if (table[i][j] == 'O') 
+			{
+				draw = true;
+				continue;
+			}
+			else {
+				draw = false;
+				break;
+			}
+		}
+		
+		
+	}
+	if (draw == true)
+	{
+		std::cout << "It's a draw!";
+		return;
+	}
+}
 
 void drawBoard()
 {
 	for (int i = 0; i < 3; i++)
 	{
+		std::cout << "-------------" << std::endl;
+		std::cout << "| ";
 		for (int j = 0; j < 3; j++)
 		{
-			std::cout << " | " << table[i][j] << " | ";
+			std::cout << table[i][j] << " | ";
 		}
+	
 		std::cout << std::endl;
 	} 
+	std::cout << "-------------" << std::endl;
 }
 
+void calcWinner()
+{
+	for (int i=0; i < 3; i++)
+	{
+		if (table[i][0] == table[i][1] && table[i][1] == table[i][2])
+		{
+			if (table[i][0] == 'X')
+				currentPlayer = 1;
+			else
+				currentPlayer = 2;
 
+			gameWon = true;
+			system("cls");
+			drawBoard();
+			std::cout << "Player " << currentPlayer << " wins!!" << std::endl;
+
+		}
+		if (table[0][i] == table[1][i] && table[1][i] == table[2][i])
+		{
+			if (table[0][i] == 'X')
+				currentPlayer = 1;
+			else
+				currentPlayer = 2;
+
+			gameWon = true;
+			system("cls");
+			drawBoard();
+			std::cout << "Player " << currentPlayer << " wins!!" << std::endl;
+
+		}
+		if (table[0][0] == table[1][1] && table[1][1] == table[2][2])
+		{
+			if (table[0][0] == 'X')
+				currentPlayer = 1;
+			else
+				currentPlayer = 2;
+
+			gameWon = true;
+			system("cls");
+			drawBoard();
+			std::cout << "Player " << currentPlayer << " wins!!" << std::endl;
+
+		}
+		if (table[0][2] == table[1][1] && table[1][1] == table[2][0])
+		{
+			if (table[0][2] == 'X')
+				currentPlayer = 1;
+			else
+				currentPlayer = 2;
+
+			gameWon = true;
+			system("cls");
+			drawBoard();
+			std::cout << "Player " << currentPlayer << " wins!!" << std::endl;
+
+		}
+	}
+}
+
+void gameEnd()
+{
+	int answer{};
+
+	std::cout << "Play again? Y/N: ";
+	std::cin >> answer;
+
+	switch (answer)
+	{
+	case 'y': case 'Y':
+		for (int i = 0; i < 3; i++)
+			char table[3][3] = { {'1','2','3'}, {'4','5','6'}, {'7','8','9'} };
+		system("cls");
+		game();
+		break;
+	case 'n': case 'N':
+		exit(0);
+	default:
+		break;
+	}
+}
 
 int main()
 {
+	
 	std::cout << "Welcome to Tic Tac Toe!\n\n";
-	drawBoard();
-	game();
 
+	while (gameWon == false) {
+		system("cls");
+		drawBoard();
+		calcWinner();
+		if (gameWon == true)
+		{
+			if (currentPlayer == 1)
+			{
+				currentPlayer = 2;
+			}
+			else if (currentPlayer == 2)
+			{
+				currentPlayer = 1;
+			}
+			break;
+		}
+		game();
+	}
+	
+	gameEnd();
 	
 	
 }
